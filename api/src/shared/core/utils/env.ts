@@ -12,6 +12,12 @@ const envVariables = z.object({
     JWT_SECRET: z.string(),
     POSTGRES_VOLUME_PATH: z.string().optional(),
     USE_CACHE: z.string().optional(),
+    AWS_RPC_URL: z.string(),
+    AWS_ACCESS_KEY_ID: z.string(),
+    AWS_SECRET_ACCESS_KEY: z.string(),
+    AWS_REGION: z.string(),
+    PRIVATE_KEY: z.string(),
+    AMB_ACCESS_POLYGON_MAINNET: z.string(),
 });
 
 envVariables.parse(process.env);

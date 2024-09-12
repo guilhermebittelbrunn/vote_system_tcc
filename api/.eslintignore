@@ -1,5 +1,1 @@
-**/*.js
-node_modules
-dist
-lib
-build
+*.js
