@@ -17,7 +17,7 @@ export class PolygonWeb3 implements IWeb3Integrator {
 
         const transaction = {
             from: this.wallet[0].address,
-            to: "0x",  // Endereço fictício
+            to: this.wallet[0].address,  // Endereço fictício
             value: '0x0',  // Nenhum valor está sendo enviado
             data: encryptedData,
             gasPrice: await this.web3.eth.getGasPrice(),

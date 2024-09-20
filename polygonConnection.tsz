@@ -1,0 +1,356 @@
+import sleep from '@core/utils/sleep';
+import crypto from 'crypto';
+import { Web3 } from 'web3';
+import { config as AwsConfig } from 'aws-sdk' ;
+import {Interface} from 'ethers'
+import { registerVote } from 'modules/vote/useCases/registerVote';
+import { registerBlock } from 'modules/blockchain/web3/useCases/registerBlock';
+
+
+function encryptData(data) {
+    const jsonData = JSON.stringify(data);
+    return crypto.createHash('sha256').update(jsonData).digest('hex');
+}
+
+// AwsConfig.update({
+//     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+//     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+//     region: process.env.AWS_REGION,
+// });
+
+function calculateHash(voteData: any): string {
+    let data = '';
+    for (const key in voteData) {
+        if (Object.prototype.hasOwnProperty.call(voteData, key)) {
+            data += `${voteData[key]}-`;
+        }
+    }
+    return crypto.createHash('sha256').update(data).digest('hex');
+}
+
+// let txData = {
+//     nonce: '0x00',
+//     gasPrice: '0x09184e72a000',
+//     gasLimit: '0x5208',
+//     to: '0x1234567890abcdef1234567890abcdef12345678',
+//     value: '0x00',
+//     data: '0x',
+//     chainId: 137,
+// };
+
+// const privateKey = '4c0883a69102937d6231471b5dbb6204fe5129617082790561a94f4d577f7891';
+
+// async function getExistingAccessor(client) {
+//     try {
+//         const response = await client.send(new ListAccessorsCommand({ NetworkType: network }));
+
+//         for (const accessor of response.Accessors) {
+//             if (accessor.Status === "AVAILABLE") {
+//                 const accessorResponse = await client.send(new GetAccessorCommand({ AccessorId: accessor.Id }));
+//                 return accessorResponse.Accessor;
+//             }
+//         }
+//     } catch (error) {
+//         console.error('Error retrieving existing Accessor. Please double check your AWS credentials.', error);
+//         throw error;
+//     }
+//     return null;
+// }
+
+// async function createAccessor() {
+//     const client = new ManagedBlockchainClient();
+//     const existingAccessor = await getExistingAccessor(client);
+
+//     if (existingAccessor) {
+//         console.log('Using existing Accessor token.');
+//         return {
+//             billingToken: existingAccessor.BillingToken
+//         };
+//     }
+//     else {
+//         console.log('Creating a new Accessor token.');
+//     }
+
+//     try {
+//         const input = {
+//             AccessorType: "BILLING_TOKEN",
+//             NetworkType: network,
+//         };
+//         const command = new CreateAccessorCommand(input);
+//         const response = await client.send(command);
+//         return {
+//             billingToken: response.BillingToken,
+//         };
+//     } catch (error) {
+//         console.error('Error creating Accessor token:', error);
+//         throw error;
+//     }
+// }
+
+// async function main() {
+//     try {
+//         console.log('Creating or retrieving AMB Access Polygon Accessor token...');
+//         const accessor = await createAccessor();
+//         const accessEndpoint = `https://mainnet.polygon.managedblockchain.us-east-1.amazonaws.com?billingtoken=${accessor.billingToken}`;
+//         const account = process.env.AWS_ACCESS_KEY_ID;
+//         const dataToSave = `PRIVATE_KEY=${account}\nAMB_ACCESS_POLYGON_MAINNET=${accessEndpoint}`;
+//         await fs.promises.writeFile('.env.chain', dataToSave);
+//         console.log('Accessor token created or retrieved. Details saved to .env file.');
+//     } catch (error) {
+//         console.error('Setup failed:', error);
+//     }
+// }
+
+
+async function main() {
+    // Creating a connection to AMB Access Polygon Mainnet
+    const web3 = new Web3(process.env.AMB_ACCESS_POLYGON_MAINNET)
+
+
+    // Generate a signing account using a private key from environment variables
+    // This account is used to securely sign transactions
+    // ONLY USE AN ACCOUNT ON MAINNET THAT HAS A SMALL AMOUNT OF FUNDS
+    const wallet = web3.eth.accounts.wallet.add(process.env.PRIVATE_KEY);
+
+    // Defining a transaction object (specifying the sender, receiver, and amount to send)
+    const tx = {
+        from: wallet[0].address,
+        to: "0x1E67B920828254C5cEBad802877060f1ae1e998F",
+        value: '0x00'
+        // value: web3.utils.toWei("0.001", "ether")
+    };
+
+    // Attempt to send the transaction
+    try {
+        // Estimate the gas limit required for the transaction.
+        tx.gas = await web3.eth.estimateGas(tx);
+
+        // Retrieve the current gas price from the network.
+        tx.gasPrice = await web3.eth.getGasPrice();
+
+        console.log(`Sending transaction ...`);
+        // Send the transaction and wait for the receipt
+        const receipt = await web3.eth.sendTransaction(tx);
+
+        // Log successful transaction details
+        console.log(`Transaction hash: ${receipt.transactionHash}`);
+        console.log(`Transaction successful! Block: ${receipt.blockNumber.toLocaleString()}`);
+    } catch (error) {
+        // Log any errors encountered during the transaction
+        console.error(`An error occurred: ${error.message}`);
+    }
+}
+
+async function sendv2() {
+    // Criar uma conexão com a rede Polygon Mainnet
+    const web3 = new Web3(process.env.AMB_ACCESS_POLYGON_MAINNET);
+
+    // Definir os dados que queremos armazenar na blockchain
+    const inputData = { ok: true, name: 'teste' };
+
+    // Converter os dados para uma string criptografada (hexadecimal)
+    const encryptedData = web3.utils.asciiToHex(JSON.stringify(inputData));
+
+    // Adicionar a chave privada ao wallet
+    const wallet = web3.eth.accounts.wallet.add(process.env.PRIVATE_KEY);
+
+    // Criar a transação, com os dados codificados no campo `data`
+    const tx = {
+        from: wallet[0].address,
+        to: "0x1E67B920828254C5cEBad802877060f1ae1e998F", // endereço de destino, pode ser um endereço fictício
+        value: '0x0', // Nenhum valor está sendo enviado
+        data: encryptedData, // Dados que queremos armazenar
+        gasPrice: await web3.eth.getGasPrice(),
+        gas: await web3.eth.estimateGas({ from: wallet[0].address }),
+    };
+
+    // Enviar a transação
+    try {
+        console.log(`Enviando transação...`);
+        const receipt = await web3.eth.sendTransaction(tx);
+
+        // Exibir detalhes da transação
+        console.log(`Transação hash: ${receipt.transactionHash}`);
+        console.log(`Transação bem-sucedida! Bloco: ${receipt.blockNumber.toLocaleString()}`);
+    } catch (error) {
+        console.error(`Erro ao enviar a transação: ${error.message}`);
+    }
+}
+async function getTransactionDatav2(blockNumber) {
+    const web3 = new Web3(process.env.AMB_ACCESS_POLYGON_MAINNET);
+
+    try {
+        // Buscar o bloco completo incluindo as transações
+        const block = await web3.eth.getBlock(blockNumber, true); // true para incluir transações completas
+        // console.log(`Bloco ${blockNumber} encontrado. Transações:`, block.transactions);
+
+
+        for (let tx of block.transactions) {
+            if (tx.input && tx.input !== '0x') {
+                // Decodificar os dados armazenados no campo input da transação
+                const dataHex = tx.input;
+                const dataDecoded = web3.utils.hexToAscii(dataHex);
+
+                // Exibir os dados da transação
+                if(dataDecoded.indexOf('{"ok"') !== -1){
+                    console.log(`Dados da transação (hash: ${tx.hash}): ${dataDecoded}`);
+                    const parsedData = JSON.parse(dataDecoded); // Converter string para objeto
+                    console.log('Dados decodificados:', parsedData);
+                }
+                try {
+                    // const parsedData = JSON.parse(dataDecoded); // Converter string para objeto
+                    // console.log('Dados decodificados:', 'parsedData');
+                } catch (e) {
+                    console.error('Erro ao decodificar os dados:', e);
+                }
+            } else {
+                console.log(`Transação (hash: ${tx.hash}) sem dados.`);
+            }
+        }
+    } catch (error) {
+        console.error('Erro ao buscar o bloco:', error);
+    }
+}
+
+
+async function getTransactionData(blockNumber) {
+    const abi = ["function teste(string name, uint age)"]; // Your ABI here
+    const iface = new Interface(abi); // Correct Interface initialization
+
+    const web3 = new Web3(process.env.AMB_ACCESS_POLYGON_MAINNET);
+    try {
+        // Fetch the block with full transactions
+        const block = await web3.eth.getBlock(blockNumber, true);
+        console.log(`Block ${blockNumber} found. Transactions:`, block.transactions);
+
+        for (let tx of block.transactions) {
+            if (tx.input && tx.input !== '0x') {
+                const decoded = iface.decodeFunctionData("teste", tx.input);
+                console.log(`Transaction data (tx hash: ${tx.hash}):`, decoded);
+            } else {
+                console.log(`Transaction (tx hash: ${tx.hash}) has no data.`);
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching the block:', error);
+    }
+}
+// async function getTransactionData(blockNumber) {
+//     const web3 = new Web3(process.env.AMB_ACCESS_POLYGON_MAINNET);
+//     try {
+//         // Obtenha o bloco completo incluindo as transações
+//         const block = await web3.eth.getBlock(blockNumber, true); // true para incluir as transações completas
+//         console.log(`Bloco ${blockNumber} encontrado. Transações:`, block.transactions);
+
+//         // Itera sobre as transações do bloco
+//         for (let tx of block.transactions) {
+//             if (tx.input && tx.input !== '0x') {
+//                 // Decodificar os dados em formato hexadecimal para UTF-8
+//                 const dataHex = tx.input;
+//                 const dataDecoded = web3.utils.hexToUtf8(dataHex);
+
+//                 // Exibe os dados decodificados da transação
+//                 console.log(`Dados da transação (tx hash: ${tx.hash}): ${dataDecoded}`);
+//             } else {
+//                 console.log(`Transação (tx hash: ${tx.hash}) sem dados.`);
+//             }
+//         }
+//     } catch (error) {
+//         console.error('Erro ao buscar o bloco:', error);
+//     }
+// }
+async function getCurrentBalance(){
+    const web3 = new Web3(process.env.AMB_ACCESS_POLYGON_MAINNET)
+    const wallet = web3.eth.accounts.wallet.add(process.env.PRIVATE_KEY);
+    const balance = await web3.eth.getBalance(wallet[0].address);
+    console.log(`Balance: ${balance} ETH`);
+}
+
+async function getBlock(block:number){
+    const web3 = new Web3(process.env.AMB_ACCESS_POLYGON_MAINNET)
+    const blockData = await web3.eth.getBlock(block);
+    console.log(blockData);
+}
+
+async function getGasTransactionPrice(){
+    const web3 = new Web3(process.env.AMB_ACCESS_POLYGON_MAINNET)
+    const wallet = web3.eth.accounts.wallet.add(process.env.PRIVATE_KEY);
+    const tx = {
+        from: wallet[0].address,
+        to: "0x1E67B920828254C5cEBad802877060f1ae1e998F",
+        value: web3.utils.toWei("0.000000000001", "ether")
+    };
+    const gasLimit = await web3.eth.estimateGas(tx); // Estimar o gas para a transação
+    const gasPrice = await web3.eth.getGasPrice(); // Obter o preço do gas
+    const totalCost = gasLimit * gasPrice; // Custo total da transação
+
+console.log(`Custo total da transação: ${web3.utils.fromWei(totalCost.toString(), 'ether')} ETH`);
+
+}
+
+const connectToBlockchain = async (): Promise<void> => {
+    try {
+
+        // main();
+        // await send();
+        // await sendv2();
+
+
+        // await getTransactionData(61678949)
+        // await getTransactionDatav2(61679454)
+
+
+        const tx = await registerBlock.execute({data: {ok:true}})
+
+        console.log('tx :>> ', tx);
+
+        // await getBlock(61672733)
+        // await getBlock(61679454)
+        // await getBlock(61677023)
+        // hash: 0x5c05f2b3b915c5513daa83f862b0c78b3df332d2bb86df601efa21dbc024a28e
+        // await getGasTransactionPrice()
+        // await getCurrentBalance();
+        console.log('Connecting to Blockchain network...');
+        // console.log('Connecting to Blockchain network...');
+        // const blockchainConnection = PolygonWeb3Connection.getInstance();
+        // // // const estimatedGas = await blockchainConnection.estimateGas(txData);
+        // // console.log('estimatedGas :>> ', estimatedGas);
+        // // txData.gasLimit = estimatedGas;
+
+        // const res = await blockchainConnection.getAccounts();
+        // // const res = await blockchainConnection.sendTransactionWithData(privateKey, '0x1234567890abcdef1234567890abcdef12345678',txData.gasPrice);
+
+        // console.log('Transaction result:', res);
+        // console.log(`Connected to Blockchain network`);
+    } catch (error: any) {
+        console.error(`An error occurred in blockchain network: ${error}`);
+        console.error('Retrying connection in 5 seconds...');
+
+        await sleep(5000);
+        await connectToBlockchain();
+    }
+};
+// const connectToBlockchain = async (): Promise<void> => {
+//     console.log(123);
+//     try {
+//         console.log('Connecting to Blockchain network...');
+//         const blockchainConnection = PolygonWeb3Connection.getInstance();
+//         // // const estimatedGas = await blockchainConnection.estimateGas(txData);
+//         // console.log('estimatedGas :>> ', estimatedGas);
+//         // txData.gasLimit = estimatedGas;
+
+//         const res = await blockchainConnection.getAccounts();
+//         // const res = await blockchainConnection.sendTransactionWithData(privateKey, '0x1234567890abcdef1234567890abcdef12345678',txData.gasPrice);
+
+//         console.log('Transaction result:', res);
+//         console.log(`Connected to Blockchain network`);
+//     } catch (error: any) {
+//         console.error(`An error occurred in blockchain network: ${error}`);
+//         console.error('Retrying connection in 5 seconds...');
+
+//         await sleep(5000);
+//         await connectToBlockchain();
+//     }
+// };
+
+export { connectToBlockchain };
