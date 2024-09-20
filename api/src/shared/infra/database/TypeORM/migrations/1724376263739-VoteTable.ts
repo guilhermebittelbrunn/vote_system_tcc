@@ -5,7 +5,7 @@ export class VoteTable1724376263739 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: 'votes',
+                name: 'vote',
                 columns: [
                     {
                         name: 'id',
@@ -31,7 +31,7 @@ export class VoteTable1724376263739 implements MigrationInterface {
             true,
         );
 
-        await queryRunner.createForeignKeys('votes', [
+        await queryRunner.createForeignKeys('vote', [
             new TableForeignKey({
                 columnNames: ['election_id'],
                 referencedColumnNames: ['id'],

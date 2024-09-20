@@ -11,36 +11,36 @@ import IVoteChain from 'modules/vote/repositories/IVoteChain';
 type Response = Either<GenericAppError, Vote>;
 
 export default class RegisterVote implements UseCase<RegisterVoteRequestDTO, Response> {
-    constructor(private voteRepo: IVoteRepository, private blockchain: IVoteChain) {}
+    constructor(private voteRepo: IVoteRepository) {}
 
     public async execute(dto: RegisterVoteRequestDTO): Promise<Response> {
-        const voteExists = await this.voteRepo.findByUserAndElection(dto.userId, dto.electionId);
+        // const voteExists = await this.voteRepo.findByUserAndElection(dto.userId, dto.electionId);
 
-        if (voteExists) {
-            return left(new RegisterVoteErrors.VoteAlreadyExists());
-        }
+        // if (voteExists) {
+        //     return left(new RegisterVoteErrors.VoteAlreadyExists());
+        // }
 
-        // @todo verificar a criação desse bloco aqui, talvez seja melhor usar apenas o método no blockchain
+        // // @todo verificar a criação desse bloco aqui, talvez seja melhor usar apenas o método no blockchain
 
-        const block = Block.create({
-            voterId: new UniqueEntityID(dto.userId),
-            candidateId: new UniqueEntityID(dto.candidateId),
-            electionId: new UniqueEntityID(dto.electionId),
-        });
+        // const block = Block.create({
+        //     voterId: new UniqueEntityID(dto.userId),
+        //     candidateId: new UniqueEntityID(dto.candidateId),
+        //     electionId: new UniqueEntityID(dto.electionId),
+        // });
 
-        await this.blockchain.save(block);
+        // await this.blockchain.save(block);
 
-        const voteOrError = Vote.create({
-            blockHash: block.hash,
-            electionId: new UniqueEntityID(dto.electionId),
-        });
+        // const voteOrError = Vote.create({
+        //     blockHash: block.hash,
+        //     electionId: new UniqueEntityID(dto.electionId),
+        // });
 
-        if (voteOrError.isLeft()) {
-            return left(voteOrError.value);
-        }
+        // if (voteOrError.isLeft()) {
+        //     return left(voteOrError.value);
+        // }
 
-        const vote = await this.voteRepo.insert(voteOrError.value);
+        // const vote = await this.voteRepo.insert(voteOrError.value);
 
-        return right(vote);
+        return right(null);
     }
 }

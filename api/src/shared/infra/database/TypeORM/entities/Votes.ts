@@ -2,7 +2,7 @@ import { Entity, ManyToOne, JoinColumn, Column } from 'typeorm';
 import ElectionEntity from './Election';
 import { BaseEntity } from '@core/infra/TypeORM/BaseEntity';
 
-@Entity('votes')
+@Entity('vote')
 export default class VoteEntity extends BaseEntity {
 
     @Column('uuid')

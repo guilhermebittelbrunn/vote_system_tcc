@@ -19,9 +19,9 @@ export default abstract class BaseRepository<RepoEntity extends GenericEntity, D
     async insert(domain: Domain): Promise<Domain> {
         const rawRecord = await this.mapper.toPersistence(domain);
 
-        const recordToSave = this.repository.create(rawRecord);
+        const recordToSave = this.repository.create(rawRecord as any);
 
-        const recordSaved = await this.repository.save(recordToSave);
+        const recordSaved = await this.repository.save(recordToSave as any);
 
         return this.mapper.toDomain(recordSaved);
     }
@@ -29,9 +29,9 @@ export default abstract class BaseRepository<RepoEntity extends GenericEntity, D
     async update(domain: UpdateFields<Domain>): Promise<RawID> {
         const rawRecord = await this.mapper.toPersistence(domain);
 
-        const recordToSave = this.repository.create(rawRecord);
+        const recordToSave = this.repository.create(rawRecord as any) ;
 
-        const recordSaved = await this.repository.save(recordToSave);
+        const recordSaved = await this.repository.save(recordToSave as any);
 
         return UniqueEntityID.raw((recordSaved as any).id);
     }
@@ -39,9 +39,9 @@ export default abstract class BaseRepository<RepoEntity extends GenericEntity, D
     async save(domain: Domain): Promise<Domain> {
         const rawRecord = await this.mapper.toPersistence(domain);
 
-        const recordToSave = this.repository.create(rawRecord);
+        const recordToSave = this.repository.create(rawRecord as any);
 
-        const recordSaved = await this.repository.save(recordToSave);
+        const recordSaved = await this.repository.save(recordToSave as any);
 
         return this.mapper.toDomain(recordSaved);
     }
@@ -51,7 +51,7 @@ export default abstract class BaseRepository<RepoEntity extends GenericEntity, D
 
         const rawRecords = await Promise.all(rawRecordsPromises);
 
-        const recordsSaved = await this.repository.save(rawRecords);
+        const recordsSaved = await this.repository.save(rawRecords as any);
 
         return Promise.all(recordsSaved.map(this.mapper.toDomain));
     }
@@ -61,7 +61,7 @@ export default abstract class BaseRepository<RepoEntity extends GenericEntity, D
 
         const rawRecords = await Promise.all(rawRecordsPromises);
 
-        const recordsSaved = await this.repository.save(rawRecords);
+        const recordsSaved = await this.repository.save(rawRecords as any);
 
         return recordsSaved.map(record => UniqueEntityID.raw(record.id));
     }

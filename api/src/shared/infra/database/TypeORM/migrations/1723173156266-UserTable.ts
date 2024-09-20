@@ -53,9 +53,9 @@ export class UserTable1723173156266 implements MigrationInterface {
                         default: 'now()',
                     },
                     {
-                        name: 'delete_at',
+                        name: 'deleted_at',
                         type: 'timestamp',
-                        default: 'now()',
+                        isNullable: true,
                     },
                 ],
             }),

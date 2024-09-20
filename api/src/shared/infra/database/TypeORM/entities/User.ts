@@ -3,7 +3,7 @@ import { BaseEntity } from '../../../../core/infra/TypeORM/BaseEntity';
 import bcrypt from 'bcrypt'
 
 
-@Entity('users')
+@Entity('user')
 export default class UserEntity extends BaseEntity {
     @Column()
     name: string;

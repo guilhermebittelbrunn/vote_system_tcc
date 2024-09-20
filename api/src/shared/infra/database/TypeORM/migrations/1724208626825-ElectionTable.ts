@@ -39,9 +39,9 @@ export class ElectionTable1724208626825 implements MigrationInterface {
                         default: 'now()',
                     },
                     {
-                        name: 'delete_at',
+                        name: 'deleted_at',
                         type: 'timestamp',
-                        default: 'now()',
+                        isNullable: true,
                     },
                 ]
             })

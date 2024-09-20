@@ -1,7 +1,7 @@
 import { Entity, Column } from 'typeorm';
 import { BaseEntity } from '../../../../core/infra/TypeORM/BaseEntity';
 
-@Entity('elections')
+@Entity('election')
 export default class ElectionEntity extends BaseEntity {
     @Column()
     title: string;
