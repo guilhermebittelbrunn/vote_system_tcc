@@ -26,7 +26,7 @@ export default class UserEntity extends BaseEntity {
     @Column()
     password: string;
 
-    @OneToMany(() => VoteEntity, (vote) => vote.user)
+    @OneToMany(() => VoteEntity, vote => vote.user)
     votes: VoteEntity[];
 
     @BeforeInsert()

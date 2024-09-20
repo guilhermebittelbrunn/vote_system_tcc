@@ -37,12 +37,14 @@ export class VoteTable1724376263739 implements MigrationInterface {
 
         await queryRunner.createForeignKeys('vote', [
             new TableForeignKey({
+                name: 'vote_user_id_fk',
                 columnNames: ['user_id'],
                 referencedColumnNames: ['id'],
                 referencedTableName: 'user',
                 onDelete: 'CASCADE',
             }),
             new TableForeignKey({
+                name: 'vote_election_id_fk',
                 columnNames: ['election_id'],
                 referencedColumnNames: ['id'],
                 referencedTableName: 'election',

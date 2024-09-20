@@ -19,9 +19,15 @@ export default abstract class BaseRepository<RepoEntity extends GenericEntity, D
     async insert(domain: Domain): Promise<Domain> {
         const rawRecord = await this.mapper.toPersistence(domain);
 
+        console.log('rawRecord :>> ', rawRecord);
+
         const recordToSave = this.repository.create(rawRecord as any);
 
+        console.log('recordToSave :>> ', recordToSave);
+
         const recordSaved = await this.repository.save(recordToSave as any);
+
+        console.log('recordSaved :>> ', recordSaved);
 
         return this.mapper.toDomain(recordSaved);
     }

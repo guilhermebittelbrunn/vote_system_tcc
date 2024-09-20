@@ -1,6 +1,5 @@
-import { Entity, ManyToOne, JoinColumn, Column, OneToMany, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import { Entity, ManyToOne, Column, PrimaryGeneratedColumn, CreateDateColumn, JoinColumn } from 'typeorm';
 import ElectionEntity from './Election';
-import { BaseEntity } from '@core/infra/TypeORM/BaseEntity';
 import UserEntity from './User';
 
 @Entity('vote')
@@ -11,7 +10,7 @@ export default class VoteEntity {
     @Column('uuid')
     election_id: string;
 
-    @Column('uuid')
+    @Column('uuid', {name: 'user_id'})
     user_id: string;
 
     @Column({ type: 'varchar', length: 256 })
@@ -21,10 +20,10 @@ export default class VoteEntity {
     created_at: Date;
 
     @ManyToOne(() => UserEntity, (user) => user.votes)
+    @JoinColumn({ name: 'user_id' })
     user: UserEntity;
 
     @ManyToOne(() => ElectionEntity, (election) => election.votes)
+    @JoinColumn({ name: 'election_id' })
     election: ElectionEntity;
-
-
 }

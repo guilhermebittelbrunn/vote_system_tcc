@@ -2,19 +2,17 @@ import Mapper from "@core/domain/Mapper";
 import UniqueEntityID from "@core/domain/UniqueEntityID";
 import { AllOptional } from "@core/utils/types";
 import Vote from "../domain/vote/vote";
-import VoteEntity from "@database/TypeORM/entities/Votes";
 import VoteDTO from "../dtos/vote";
-import ElectionMapper from "modules/election/mappers/electionMapper";
+import VoteEntity from "@database/TypeORM/entities/Vote";
 
 class BaseVoteMapper extends Mapper<Vote, VoteEntity, VoteDTO> {
     public toDomain(data: VoteEntity): Vote {
         return Vote.create(
             {
                 blockHash: data.block_hash,
+                userId: new UniqueEntityID(data.user_id),
                 electionId: new UniqueEntityID(data.election_id),
                 createdAt: data.created_at,
-                updatedAt: data.updated_at,
-                deletedAt: data.deleted_at,
             },
             new UniqueEntityID(data.id),
         ).value as Vote;
@@ -25,9 +23,8 @@ class BaseVoteMapper extends Mapper<Vote, VoteEntity, VoteDTO> {
             id: vote.id?.toValue(),
             block_hash: vote.blockHash,
             election_id: vote.electionId?.toValue(),
+            user_id: vote.userId?.toValue(),
             created_at: vote.createdAt,
-            updated_at: vote.updatedAt,
-            deleted_at: vote.deletedAt,
         };
     }
 
@@ -36,6 +33,7 @@ class BaseVoteMapper extends Mapper<Vote, VoteEntity, VoteDTO> {
             id: vote.id?.toValue(),
             blockHash: vote.blockHash,
             electionId: vote.electionId?.toValue(),
+            userId: vote.userId.toValue(),
             createdAt: vote.createdAt as Date,
         };
     }

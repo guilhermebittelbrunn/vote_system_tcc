@@ -6,6 +6,7 @@ import Vote from 'modules/vote/domain/vote/vote';
 import IVoteRepository from 'modules/vote/repositories/IVoteRepository';
 import RegisterVoteRequestDTO from './registerVoteRequestDTO';
 import { IWeb3Integrator } from 'modules/blockchain/web3/services/IWeb3Integrator';
+import RegisterVoteErrors from './registerVoteErrors';
 
 type Response = Either<GenericAppError, Vote>;
 
@@ -36,6 +37,8 @@ export default class RegisterVote implements UseCase<RegisterVoteRequestDTO, Res
         if(voteOrError.isLeft()) {
             return left(voteOrError.value);
         }
+
+        console.log('voteOrError :>> ', voteOrError);
 
         const vote = await this.voteRepo.insert(voteOrError.value);
 

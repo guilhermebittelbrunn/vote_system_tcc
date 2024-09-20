@@ -5,7 +5,7 @@ import { registerVoteController } from 'modules/vote/useCases/registerVote';
 
 const voteRootRouter = Router();
 
-voteRootRouter.use(adaptMiddleware(ensureAuthentication));
+// voteRootRouter.use(adaptMiddleware(ensureAuthentication));
 
 voteRootRouter.post('/register', (req, res) => {
     return registerVoteController.execute(req, res)

@@ -17,7 +17,7 @@ export default class VoteRepository extends BaseRepository<VoteEntity, Vote> imp
         const result = await this.repository.findOne({
             where: {
                 election_id: UniqueEntityID.raw(electionId),
-                user_id: userId,
+                user_id: UniqueEntityID.raw(userId),
             },
         });
 
