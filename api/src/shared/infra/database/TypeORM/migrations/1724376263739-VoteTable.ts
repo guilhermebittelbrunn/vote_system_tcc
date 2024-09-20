@@ -36,15 +36,12 @@ export class VoteTable1724376263739 implements MigrationInterface {
         );
 
         await queryRunner.createForeignKeys('vote', [
-<<<<<<< Updated upstream
-=======
             new TableForeignKey({
                 columnNames: ['user_id'],
                 referencedColumnNames: ['id'],
                 referencedTableName: 'user',
                 onDelete: 'CASCADE',
             }),
->>>>>>> Stashed changes
             new TableForeignKey({
                 columnNames: ['election_id'],
                 referencedColumnNames: ['id'],

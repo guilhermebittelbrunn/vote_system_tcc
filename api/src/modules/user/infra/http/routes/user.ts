@@ -5,7 +5,7 @@ import { Router } from 'express';
 
 const userRootRouter = Router({ mergeParams: true });
 
-userRootRouter.use(adaptMiddleware(ensureAuthentication));
+// userRootRouter.use(adaptMiddleware(ensureAuthentication));
 
 userRootRouter.post('/', async (req, res) => {
     return createUserController.execute(req, res);

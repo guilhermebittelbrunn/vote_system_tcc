@@ -3,10 +3,6 @@ import { BaseEntity } from '../../../../core/infra/TypeORM/BaseEntity';
 import bcrypt from 'bcrypt'
 import VoteEntity from './Vote';
 
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 @Entity('user')
 export default class UserEntity extends BaseEntity {
     @Column()

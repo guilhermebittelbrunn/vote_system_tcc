@@ -6,8 +6,9 @@ import Guard from "@root-shared/logic/Guard";
 import GenericErrors from "@root-shared/logic/GenericErrors";
 
 interface IVoteProps {
-    blockHash: string;  // Hash do bloco armazenado na blockchain
+    blockHash: string;
     electionId: UniqueEntityID;
+    userId: UniqueEntityID;
     createdAt?: Date;
     updatedAt?: Date;
     deletedAt?: Date;
@@ -29,6 +30,9 @@ export default class Vote extends Entity<IVoteProps> {
     get electionId(): UniqueEntityID {
         return this.props.electionId;
     }
+    get userId(): UniqueEntityID {
+        return this.props.electionId;
+    }
 
     get createdAt(): Date | undefined {
         return this.props.createdAt;
@@ -44,6 +48,7 @@ export default class Vote extends Entity<IVoteProps> {
         const guardedProps = Guard.againstNullOrUndefinedBulk([
             { argument: props.blockHash, argumentName: 'blockHash' },
             { argument: props.electionId, argumentName: 'electionId' },
+            { argument: props.userId, argumentName: 'user id' },
         ]);
 
         if (!guardedProps.succeeded) {

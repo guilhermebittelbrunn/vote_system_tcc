@@ -5,7 +5,7 @@
   "username": "postgres",
   "password": "postgres",
   "database": "voting_system",
-  "entities": ["src/modules/**/infra/database/TypeORM/entities/*.ts"],
+  "entities": ["src/shared/infra/database/TypeORM/entities/*.ts"],
   "migrations": ["src/shared/infra/database/TypeORM/migrations/*.ts"],
   "seeds": ["src/shared/infra/database/TypeORM/seeds/*.ts"],
   "cli": {
