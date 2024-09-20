@@ -1,23 +1,27 @@
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
+import { Entity, Column, BeforeInsert, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../../../core/infra/TypeORM/BaseEntity';
 import bcrypt from 'bcrypt'
+import VoteEntity from './Vote';
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 @Entity('user')
 export default class UserEntity extends BaseEntity {
     @Column()
     name: string;
 
-    @Column({ unique: true })
+    @Column()
     email: string;
 
-    @Column({ unique: true, nullable: true })
+    @Column({type: 'varchar', nullable: true })
     phone_number?: string | null;
 
-    @Column({ unique: true })
+    @Column()
     cpf: string;
 
-    @Column({ unique: true })
+    @Column()
     rg: string;
 
     @Column({ type: 'timestamp' })
@@ -25,6 +29,9 @@ export default class UserEntity extends BaseEntity {
 
     @Column()
     password: string;
+
+    @OneToMany(() => VoteEntity, (vote) => vote.user)
+    votes: VoteEntity[];
 
     @BeforeInsert()
     async createHashPassword() {

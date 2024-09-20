@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
 import ElectionEntity from './Election';
 import { BaseEntity } from '@core/infra/TypeORM/BaseEntity';
 
@@ -11,10 +11,12 @@ export default class CandidateEntity extends BaseEntity {
     @Column()
     party: string;
 
+    @CreateDateColumn()
+    created_at: Date;
+
     @Column('uuid', { nullable: true })
     election_id?: string;
 
-    @ManyToOne(() => ElectionEntity)
-    @JoinColumn({ name: 'election_id' })
+    @ManyToOne(() => ElectionEntity, (election) => election.candidates)
     election: ElectionEntity;
 }

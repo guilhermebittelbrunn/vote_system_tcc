@@ -1,10 +1,10 @@
 import UniqueEntityID from '@core/domain/UniqueEntityID';
 import BaseRepository from '@core/infra/TypeORM/BaseRepository';
 import { GenericId } from '@core/utils/types';
-import VoteEntity from '@database/TypeORM/entities/Votes';
 import Vote from 'modules/vote/domain/vote/vote';
 import VoteMapper from 'modules/vote/mappers/vote';
 import IVoteRepository from '../../IVoteRepository';
+import VoteEntity from '@database/TypeORM/entities/Vote';
 
 export default class VoteRepository extends BaseRepository<VoteEntity, Vote> implements IVoteRepository {
     mapper = VoteMapper;
@@ -17,7 +17,7 @@ export default class VoteRepository extends BaseRepository<VoteEntity, Vote> imp
         const result = await this.repository.findOne({
             where: {
                 election_id: UniqueEntityID.raw(electionId),
-                block_hash: userId,  //@todo Supondo que o blockHash foi derivado do userId (ajuste conforme necessário)
+                user_id: userId,
             },
         });
 

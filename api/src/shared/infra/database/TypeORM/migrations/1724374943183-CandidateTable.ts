@@ -5,7 +5,7 @@ export class CandidateTable1724374943183 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
          await queryRunner.createTable(
             new Table({
-                name: 'candidates',
+                name: 'candidate',
                 columns: [
                     {
                         name: 'id',
@@ -40,21 +40,21 @@ export class CandidateTable1724374943183 implements MigrationInterface {
         );
 
         await queryRunner.createForeignKey(
-            'candidates',
+            'candidate',
             new TableForeignKey({
                 columnNames: ['election_id'],
                 referencedColumnNames: ['id'],
-                referencedTableName: 'elections',
+                referencedTableName: 'election',
                 onDelete: 'CASCADE',
             }),
         );
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-          const table = await queryRunner.getTable('candidates');
+          const table = await queryRunner.getTable('candidate');
         const foreignKey = table!.foreignKeys.find(fk => fk.columnNames.indexOf('election_id') !== -1);
-        await queryRunner.dropForeignKey('candidates', foreignKey!);
-        await queryRunner.dropTable('candidates');
+        await queryRunner.dropForeignKey('candidate', foreignKey!);
+        await queryRunner.dropTable('candidate');
     }
 
 }

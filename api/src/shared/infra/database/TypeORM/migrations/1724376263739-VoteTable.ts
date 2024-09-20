@@ -22,6 +22,10 @@ export class VoteTable1724376263739 implements MigrationInterface {
                         type: 'uuid',
                     },
                     {
+                        name: 'user_id',
+                        type: 'uuid',
+                    },
+                    {
                         name: 'created_at',
                         type: 'timestamp',
                         default: 'CURRENT_TIMESTAMP',
@@ -32,19 +36,28 @@ export class VoteTable1724376263739 implements MigrationInterface {
         );
 
         await queryRunner.createForeignKeys('vote', [
+<<<<<<< Updated upstream
+=======
+            new TableForeignKey({
+                columnNames: ['user_id'],
+                referencedColumnNames: ['id'],
+                referencedTableName: 'user',
+                onDelete: 'CASCADE',
+            }),
+>>>>>>> Stashed changes
             new TableForeignKey({
                 columnNames: ['election_id'],
                 referencedColumnNames: ['id'],
-                referencedTableName: 'elections',
+                referencedTableName: 'election',
                 onDelete: 'CASCADE',
-            }),
+        })
         ]);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        const table = await queryRunner.getTable('votes');
-        const foreignKeys = table!.foreignKeys.filter(fk => ['election_id'].includes(fk.columnNames[0]));
-        await queryRunner.dropForeignKeys('votes', foreignKeys);
-        await queryRunner.dropTable('votes');
+        const table = await queryRunner.getTable('vote');
+        const foreignKeys = table!.foreignKeys.filter(fk => ['election_id', 'user_id'].includes(fk.columnNames[0]));
+        await queryRunner.dropForeignKeys('vote', foreignKeys);
+        await queryRunner.dropTable('vote');
     }
 }

@@ -7,10 +7,13 @@ import IVoteRepository from 'modules/vote/repositories/IVoteRepository';
 import RegisterVoteErrors from './registerVoteErrors';
 import RegisterVoteRequestDTO from './registerVoteRequestDTO';
 import IVoteChain from 'modules/vote/repositories/IVoteChain';
+import { VoteBlock } from 'modules/vote/domain/voteBlock/voteBlock';
+import { IWeb3Integrator } from 'modules/blockchain/web3/services/IWeb3Integrator';
 
 type Response = Either<GenericAppError, Vote>;
 
 export default class RegisterVote implements UseCase<RegisterVoteRequestDTO, Response> {
+<<<<<<< Updated upstream
     constructor(private voteRepo: IVoteRepository) {}
 
     public async execute(dto: RegisterVoteRequestDTO): Promise<Response> {
@@ -38,6 +41,34 @@ export default class RegisterVote implements UseCase<RegisterVoteRequestDTO, Res
         // if (voteOrError.isLeft()) {
         //     return left(voteOrError.value);
         // }
+=======
+    constructor(private voteRepo: IVoteRepository, private web3Integrator: IWeb3Integrator ) {}
+
+    public async execute(dto: RegisterVoteRequestDTO): Promise<Response> {
+        console.log('dto :>> ', dto);
+
+        // const voteExists = await this.voteRepo.findByUserAndElection(dto.userId, dto.electionId);
+
+        // console.log('voteExists :>> ', voteExists);
+
+        // if (voteExists) {
+        //     return left(new RegisterVoteErrors.VoteAlreadyExists());
+        // }
+
+        const transactionHash = await this.web3Integrator.registerTransaction({candidateId: dto.candidateId});
+
+        console.log('transactionHash :>> ', transactionHash);
+
+        const voteOrError = Vote.create({
+            blockHash: transactionHash.blockNumber,
+            electionId: new UniqueEntityID(dto.electionId),
+            userId: new UniqueEntityID(dto.userId),
+        });
+
+        if(voteOrError.isLeft()) {
+            return left(voteOrError.value);
+        }
+>>>>>>> Stashed changes
 
         // const vote = await this.voteRepo.insert(voteOrError.value);
 
