@@ -64,6 +64,7 @@ export default abstract class BaseController {
 
         if (error instanceof QueryFailedError) {
             if ((error as unknown as DatabaseError).code === FOREIGN_KEY_VIOLATION) {
+                console.log({error})
                 return res.status(StatusCodes.CONFLICT).json({
                     message: 'Registro não pode ser excluído porque está vinculado à outros registros',
                 });

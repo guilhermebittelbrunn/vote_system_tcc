@@ -8,15 +8,16 @@ export default class CandidateEntity extends BaseEntity {
     @Column()
     name: string;
 
-    @Column()
+    @Column({ nullable: true })
     party: string;
 
     @CreateDateColumn()
     created_at: Date;
 
-    @Column('uuid', { nullable: true })
-    election_id?: string;
+    @Column('uuid')
+    election_id: string;
 
     @ManyToOne(() => ElectionEntity, (election) => election.candidates)
+    @JoinColumn({ name: 'election_id' })
     election: ElectionEntity;
 }

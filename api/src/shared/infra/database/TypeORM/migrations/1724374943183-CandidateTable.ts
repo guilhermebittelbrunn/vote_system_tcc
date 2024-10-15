@@ -13,16 +13,17 @@ export class CandidateTable1724374943183 implements MigrationInterface {
                         isPrimary: true,
                     },
                     {
+                        name: 'election_id',
+                        type: 'uuid',
+                    },
+                    {
                         name: 'name',
                         type: 'varchar',
                     },
                     {
                         name: 'party',
                         type: 'varchar',
-                    },
-                    {
-                        name: 'election_id',
-                        type: 'uuid',
+                        isNullable: true,
                     },
                     {
                         name: 'created_at',
@@ -34,6 +35,7 @@ export class CandidateTable1724374943183 implements MigrationInterface {
                         type: 'timestamp',
                         default: 'CURRENT_TIMESTAMP',
                     },
+
                 ],
             }),
             true,
@@ -42,10 +44,12 @@ export class CandidateTable1724374943183 implements MigrationInterface {
         await queryRunner.createForeignKey(
             'candidate',
             new TableForeignKey({
+                name: 'candidate_election_id_fk',
                 columnNames: ['election_id'],
                 referencedColumnNames: ['id'],
                 referencedTableName: 'election',
-                onDelete: 'CASCADE',
+                onDelete: 'RESTRICT',
+                onUpdate: 'RESTRICT',
             }),
         );
     }

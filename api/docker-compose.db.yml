@@ -12,3 +12,14 @@ services:
       POSTGRES_DB: ${DB_NAME}
     volumes:
       - ${POSTGRES_VOLUME_PATH}:/var/lib/postgresql/data
+  rabbitmq:
+    container_name: comanda10-rabbitmq
+    image: rabbitmq:3-management-alpine
+    restart: unless-stopped
+    environment:
+        RABBITMQ_DEFAULT_USER: ${AWS_MQ_USERNAME}
+        RABBITMQ_DEFAULT_PASS: ${AWS_MQ_PASSWORD}
+        RABBITMQ_DEFAULT_VHOST: "/dev"
+    ports:
+        - 5672:5672
+        - 15672:15672

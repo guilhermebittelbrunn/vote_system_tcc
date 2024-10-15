@@ -19,15 +19,9 @@ export default abstract class BaseRepository<RepoEntity extends GenericEntity, D
     async insert(domain: Domain): Promise<Domain> {
         const rawRecord = await this.mapper.toPersistence(domain);
 
-        console.log('rawRecord :>> ', rawRecord);
-
         const recordToSave = this.repository.create(rawRecord as any);
 
-        console.log('recordToSave :>> ', recordToSave);
-
         const recordSaved = await this.repository.save(recordToSave as any);
-
-        console.log('recordSaved :>> ', recordSaved);
 
         return this.mapper.toDomain(recordSaved);
     }
@@ -35,7 +29,7 @@ export default abstract class BaseRepository<RepoEntity extends GenericEntity, D
     async update(domain: UpdateFields<Domain>): Promise<RawID> {
         const rawRecord = await this.mapper.toPersistence(domain);
 
-        const recordToSave = this.repository.create(rawRecord as any) ;
+        const recordToSave = this.repository.create(rawRecord as any);
 
         const recordSaved = await this.repository.save(recordToSave as any);
 
@@ -55,9 +49,9 @@ export default abstract class BaseRepository<RepoEntity extends GenericEntity, D
     async insertBulk(domains: Array<Domain>): Promise<Array<Domain>> {
         const rawRecordsPromises = domains.map(domain => this.mapper.toPersistence(domain));
 
-        const rawRecords = await Promise.all(rawRecordsPromises);
+        const rawRecords = await Promise.all(rawRecord as anysPromises);
 
-        const recordsSaved = await this.repository.save(rawRecords as any);
+        const recordsSaved = await this.repository.save(rawRecord as anys);
 
         return Promise.all(recordsSaved.map(this.mapper.toDomain));
     }
@@ -65,9 +59,9 @@ export default abstract class BaseRepository<RepoEntity extends GenericEntity, D
     async updateBulk(domains: Array<UpdateFields<Domain>>): Promise<Array<RawID>> {
         const rawRecordsPromises = domains.map(domain => this.mapper.toPersistence(domain));
 
-        const rawRecords = await Promise.all(rawRecordsPromises);
+        const rawRecords = await Promise.all(rawRecord as anysPromises);
 
-        const recordsSaved = await this.repository.save(rawRecords as any);
+        const recordsSaved = await this.repository.save(rawRecord as anys);
 
         return recordsSaved.map(record => UniqueEntityID.raw(record.id));
     }

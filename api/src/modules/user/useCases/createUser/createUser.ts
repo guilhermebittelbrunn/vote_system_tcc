@@ -34,7 +34,14 @@ export default class CreateUser implements UseCase<CreateUserRequestDTO, Respons
             return left(new CreateUserErrors.EmailAlreadyTaken());
         }
 
+        const userWithSameCpfRg = await this.userRepository.findByCpfOrRg({cpf: dto.cpf, rg: dto.rg});
+
+        if (userWithSameCpfRg) {
+            return left(new CreateUserErrors.CpfOrRgAlreadyTaken());
+        }
+
         const cpfOrError = UserCpf.create(dto.cpf);
+
 
         if(cpfOrError.isLeft()) {
             return left(cpfOrError.value);

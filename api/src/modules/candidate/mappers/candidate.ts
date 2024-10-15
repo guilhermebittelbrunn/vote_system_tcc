@@ -12,7 +12,7 @@ class BaseCandidateMapper extends Mapper<Candidate, CandidateEntity, CandidateDT
             {
                 name: data.name,
                 party: data.party,
-                electionId: new UniqueEntityID(data.election.id),
+                electionId: new UniqueEntityID(data.election_id),
                 createdAt: data.created_at,
                 updatedAt: data.updated_at,
                 deletedAt: data.deleted_at,
@@ -26,7 +26,7 @@ class BaseCandidateMapper extends Mapper<Candidate, CandidateEntity, CandidateDT
         return {
             id: candidate.id?.toValue(),
             name: candidate.name,
-            party: candidate.party,
+            party: candidate.party ?? undefined,
             election_id: candidate.electionId?.toValue(),
             created_at: candidate.createdAt,
             updated_at: candidate.updatedAt,

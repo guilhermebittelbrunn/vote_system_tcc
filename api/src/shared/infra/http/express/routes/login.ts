@@ -3,7 +3,7 @@ import { Router } from 'express';
 
 const loginRouter = Router();
 
-loginRouter.post('/login', async (req, res) => {
+loginRouter.post('/', async (req, res) => {
     return loginController.execute(req, res);
 });
 

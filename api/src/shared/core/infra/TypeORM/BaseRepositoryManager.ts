@@ -1,8 +1,9 @@
-import Entity from '@core/domain/Entity';
 import { EntityManager, Repository, getManager } from 'typeorm';
-import BaseRepositoryMethods from './BaseRepositoryMethods';
+
+import Entity from '@core/domain/Entity';
 import MapperInterface from '@core/domain/MapperInterface';
 import ORMContext from '@root-shared/infra/http/contexts/cls/ORMContext';
+import BaseRepositoryMethods from './BaseRepositoryMethods';
 
 
 export default abstract class BaseRepositoryManager<

@@ -4,6 +4,8 @@ import { Either, left, right } from "@root-shared/logic/Either";
 import GenericAppError from "@root-shared/logic/GenericAppError";
 import Guard from "@root-shared/logic/Guard";
 import GenericErrors from "@root-shared/logic/GenericErrors";
+import Candidates from "modules/candidate/domain/candidate/candidates";
+import Candidate from "modules/candidate/domain/candidate/candidate";
 
 interface IElectionProps {
     title: string;
@@ -13,6 +15,9 @@ interface IElectionProps {
     createdAt?: Date;
     updatedAt?: Date;
     deletedAt?: Date;
+    image?: string;
+
+    candidates: Candidates;
 }
 
 export default class Election extends Entity<IElectionProps> {
@@ -32,6 +37,10 @@ export default class Election extends Entity<IElectionProps> {
         return this.props.description;
     }
 
+    get image(): string | undefined {
+        return this.props.image;
+    }
+
     get startDate(): Date {
         return this.props.startDate;
     }
@@ -49,6 +58,18 @@ export default class Election extends Entity<IElectionProps> {
     }
     get deletedAt(): Date | undefined {
         return this.props.updatedAt;
+    }
+
+    get candidates(): Candidates {
+        return this.props.candidates;
+    }
+
+    addCandidate(candidate: Candidate): void {
+        this.candidates.add(candidate);
+    }
+
+    removeCandidate(candidate: Candidate): void {
+        this.candidates.remove(candidate);
     }
 
     public static create(props: IElectionProps, id?: UniqueEntityID): Either<GenericAppError, Election> {

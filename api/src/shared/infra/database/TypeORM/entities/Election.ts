@@ -11,6 +11,9 @@ export default class ElectionEntity extends BaseEntity {
     @Column('text')
     description: string;
 
+    @Column('text', { nullable: true })
+    image: string;
+
     @Column('timestamp')
     start_date: Date;
 

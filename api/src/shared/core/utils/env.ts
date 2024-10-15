@@ -18,6 +18,12 @@ const envVariables = z.object({
     AWS_REGION: z.string(),
     PRIVATE_KEY: z.string(),
     AMB_ACCESS_POLYGON_MAINNET: z.string(),
+    AWS_MQ_HOST: z.string(),
+    AWS_MQ_PORT: z.string(),
+    AWS_MQ_PROTOCOL: z.string(),
+    AWS_MQ_USERNAME: z.string(),
+    AWS_MQ_PASSWORD: z.string(),
+    UPLOAD_MAX_FILE_SIZE_MB: z.string(),
 });
 
 envVariables.parse(process.env);

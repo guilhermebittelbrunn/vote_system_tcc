@@ -16,6 +16,7 @@ export class VoteTable1724376263739 implements MigrationInterface {
                         name: 'block_hash',
                         type: 'varchar',
                         length: '256',
+                        isNullable: true,
                     },
                     {
                         name: 'election_id',

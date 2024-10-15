@@ -8,7 +8,7 @@ import Election from "modules/election/domain/election/election";
 
 interface ICandidateProps {
     name: string;
-    party: string;
+    party: string | null;
     electionId: UniqueEntityID;
     createdAt?: Date;
     updatedAt?: Date;
@@ -30,7 +30,7 @@ export default class Candidate extends Entity<ICandidateProps> {
         return this.props.name;
     }
 
-    get party(): string {
+    get party(): string | null {
         return this.props.party;
     }
 
@@ -65,7 +65,6 @@ export default class Candidate extends Entity<ICandidateProps> {
     public static create(props: ICandidateProps, id?: UniqueEntityID): Either<GenericAppError, Candidate> {
         const guardedProps = Guard.againstNullOrUndefinedBulk([
             { argument: props.name, argumentName: 'name' },
-            { argument: props.party, argumentName: 'party' },
             { argument: props.electionId, argumentName: 'electionId' },
         ]);
 

@@ -1,4 +1,4 @@
-import { Entity, Column, BeforeInsert, OneToMany } from 'typeorm';
+import { Entity, Column, BeforeInsert, OneToMany, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../../../core/infra/TypeORM/BaseEntity';
 import bcrypt from 'bcrypt'
 import VoteEntity from './Vote';
@@ -27,6 +27,7 @@ export default class UserEntity extends BaseEntity {
     password: string;
 
     @OneToMany(() => VoteEntity, vote => vote.user)
+    @JoinColumn({ name: 'user_id' })
     votes: VoteEntity[];
 
     @BeforeInsert()

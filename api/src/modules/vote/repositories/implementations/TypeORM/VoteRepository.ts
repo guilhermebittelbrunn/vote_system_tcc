@@ -23,4 +23,18 @@ export default class VoteRepository extends BaseRepository<VoteEntity, Vote> imp
 
         return this.mapper.toDomainOrNull(result);
     }
+
+    public async listByUser(userId: GenericId) : Promise<Vote[]> {
+        const query = this.repository.createQueryBuilder('vote')
+            .leftJoinAndSelect('vote.election', 'election')
+            .where('vote.user_id = :userId', { userId })
+            .orderBy('vote.created_at', 'DESC');
+
+        const results = await query.setParameters({
+            userId,
+        }).getMany()
+
+        return results.map(this.mapper.toDomain);
+
+    }
 }

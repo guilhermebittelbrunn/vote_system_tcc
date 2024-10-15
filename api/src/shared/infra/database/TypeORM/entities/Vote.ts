@@ -1,6 +1,7 @@
 import { Entity, ManyToOne, Column, PrimaryGeneratedColumn, CreateDateColumn, JoinColumn } from 'typeorm';
 import ElectionEntity from './Election';
 import UserEntity from './User';
+import { VoteStatusEnum } from '@root-shared/types/vote';
 
 @Entity('vote')
 export default class VoteEntity {
@@ -13,8 +14,11 @@ export default class VoteEntity {
     @Column('uuid', {name: 'user_id'})
     user_id: string;
 
-    @Column({ type: 'varchar', length: 256 })
-    block_hash: string;
+    @Column({ type: 'varchar', length: 255, nullable: true })
+    block_hash?: string | null;
+
+    @Column({ type: 'varchar', length: 30 })
+    status: VoteStatusEnum;
 
     @CreateDateColumn()
     created_at: Date;

@@ -1,10 +1,15 @@
 import GenericErrors from "@root-shared/logic/GenericErrors";
 import { UseCaseError } from "@root-shared/logic/UseCaseError";
 
-namespace LoginGestaoErrors {
-    export class EmailNotExist extends UseCaseError {
+namespace LoginErrors {
+    export class EmailNotExist extends GenericErrors.NotFound {
         constructor() {
             super('E-mail não cadastrado no sistema.');
+        }
+    }
+    export class CpfOrRgNotExist extends GenericErrors.NotFound {
+        constructor() {
+            super('CPF/RG não cadastrado no sistema.');
         }
     }
 
@@ -19,6 +24,7 @@ namespace LoginGestaoErrors {
             super('O tipo de usuário não tem permissão de acesso.');
         }
     }
+
 }
 
-export default LoginGestaoErrors;
+export default LoginErrors;

@@ -11,13 +11,15 @@ export default class ElectionRepository extends BaseRepository<ElectionEntity, E
 
     usesSoftDelete = false;
 
-    // public async findById(id: GenericId): Promise<Election | null> {
-    //     const result = await this.repository.findOne({
-    //         where: {
-    //             id: UniqueEntityID.raw(id),
-    //         },
-    //     });
+    public async findByIdWithCandidates(id: string): Promise<Election | null> {
+        const result = await this.repository.findOne({where: {id}, relations: ['candidates'] });
 
-    //     return this.mapper.toDomainOrNull(result);
-    // }
+        return this.mapper.toDomainOrNull(result)
+    }
+
+    public async list(): Promise<Election[]> {
+        const result = await this.repository.find();
+
+        return result.map(this.mapper.toDomain);
+    }
 }
