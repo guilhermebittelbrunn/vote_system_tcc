@@ -5,11 +5,11 @@ import { findElectionByIdController } from 'modules/election/useCases/findElecti
 import { listElectionsController } from 'modules/election/useCases/listElections';
 
 const upload = initUpload();
-// const createUpload = upload.single('image');
-const createUpload = upload.fields([
-    { name: 'image', maxCount: 1 }, // Imagem da eleição
-    { name: 'candidateImages', maxCount: 10 } // Imagens dos candidatos
-]);
+const createUpload = upload.single('image');
+// const createUpload = upload.fields([
+//     { name: 'image', maxCount: 1 }, // Imagem da eleição
+//     { name: 'candidateImages', maxCount: 10 } // Imagens dos candidatos
+// ]);
 
 const electionRootRouter = Router();
 
