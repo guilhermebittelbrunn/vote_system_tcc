@@ -1,0 +1,57 @@
+{
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "lib": ["es2021"],
+        "isolatedModules": false,
+        "declaration": false,
+        "target": "es6",
+        "module": "commonJS",
+        "noImplicitAny": false,
+        "strictPropertyInitialization": false,
+        "skipLibCheck": true,
+        "strict": true,
+        "esModuleInterop": true,
+        "outDir": "./dist",
+        "baseUrl": "./src",
+        "sourceMap": true,
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "typeRoots": [
+            "../../node_modules/@types",
+            "../../node_modules/@0x/typescript-typings/types",
+            "node_modules/@types",
+            "node_modules/@0x/typescript-typings/types"
+        ],
+        "paths": {
+            "__mocks__/*": ["./__mocks__/*"],
+            "@core/*": ["./shared/core/*"],
+            "@database/*": ["./shared/infra/database/*"],
+            "@utils/*": ["./shared/core/utils/*"],
+            "@root-shared/*": ["./shared/*"],
+            "@user/*": ["./modules/user/*"],
+            "@entity/*": ["./modules/entity/*"],
+            "@location/*": ["./modules/location/*"],
+            "@payment/*": ["./modules/payment/*"],
+            "@business/*": ["./modules/business/*"],
+            "@fiscal/*": ["./modules/fiscal/*"],
+            "@delivery/*": ["./modules/delivery/*"],
+            "@printer/*": ["./modules/printer/*"],
+            "@catalog/*": ["./modules/catalog/*"],
+            "@inventory/*": ["./modules/inventory/*"],
+            "@shared/*": ["./modules/shared/*"],
+            "@order/*": ["./modules/order/*"],
+            "@billing/*": ["./modules/billing/*"]
+        }
+    },
+    "include": [
+        "src/*.ts",
+        "src/**/*.ts",
+        "src/**/*.js"
+    ],
+    "exclude": [
+        "node_modules",
+        "node_modules/web3-core",
+        "node_modules/web3-eth-accounts"
+    ]
+ }

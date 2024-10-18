@@ -1,0 +1,8 @@
+import { Column, Entity, PrimaryColumn } from 'typeorm';
+
+@Entity('{{ snakeCase name }}')
+export default class {{ pascalCase name }}Entity {
+    @PrimaryColumn('uuid')
+    id: string;
+    {{data}}
+}

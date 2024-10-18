@@ -1,0 +1,16 @@
+import {{pascalCase name}} from './{{camelCase name}}';
+
+let {{camelCase name}}: {{pascalCase name}};
+
+describe('{{sentenceCase name}}', () => {
+    beforeEach(() => {
+        {{camelCase name}} = new {{pascalCase name}}();
+    });
+
+    it('should be able to {{ lowerCase name }}', async () => {
+        const result = await {{camelCase name}}.execute();
+
+        expect(result.isLeft()).toBeFalsy();
+        expect(result.isRight()).toBeTruthy();
+    });
+});

@@ -1,6 +1,0 @@
-{
-    "src/**/*.ts": [
-        "yarn eslint --fix",
-        "yarn test --findRelatedTests --bail --passWithNoTests"
-    ]
-}

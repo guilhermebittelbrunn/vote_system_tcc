@@ -1,0 +1,41 @@
+import Mapper from '@core/domain/Mapper';
+import UniqueEntityID from '@core/domain/UniqueEntityID';
+import { AllOptional } from '@core/utils/types';
+import {{pascalCase name}}Entity from '@database/TypeORM/entities/{{module}}/{{camelCase name}}';
+import {{pascalCase name}} from '../domain/{{camelCase name}}';
+import {{pascalCase name}}DTO from '../dtos/{{camelCase name}}';
+
+class Base{{pascalCase name}}Mapper extends Mapper<{{pascalCase name}}, {{pascalCase name}}Entity, {{pascalCase name}}DTO> {
+    toDomain({{camelCase name}}: {{pascalCase name}}Entity): {{pascalCase name}} {
+        return {{pascalCase name}}.create(
+            {
+                createdAt: {{camelCase name}}.created_at,
+                updatedAt: {{camelCase name}}.updated_at,
+                deletedAt: {{camelCase name}}.deleted_at,
+            },
+            new UniqueEntityID({{camelCase name}}.id),
+        ).value as {{pascalCase name}};
+    }
+
+    toPersistence({{camelCase name}}: AllOptional<{{pascalCase name}}>): AllOptional<{{pascalCase name}}Entity> {
+        return {
+            id: {{camelCase name}}.id?.toValue(),
+            created_at: {{camelCase name}}.createdAt,
+            updated_at: {{camelCase name}}.updatedAt,
+            deleted_at: {{camelCase name}}.deletedAt,
+        };
+    }
+
+    toDTO({{camelCase name}}: {{pascalCase name}}): {{pascalCase name}}DTO {
+        return {
+            id: {{camelCase name}}.id.toValue(),
+            createdAt: {{camelCase name}}.createdAt as Date,
+            updatedAt: {{camelCase name}}.updatedAt as Date,
+            deletedAt: {{camelCase name}}.deletedAt,
+        };
+    }
+}
+
+const {{pascalCase name}}Mapper = new Base{{pascalCase name}}Mapper();
+
+export default {{pascalCase name}}Mapper;

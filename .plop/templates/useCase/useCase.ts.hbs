@@ -1,0 +1,14 @@
+import UseCase from '@core/domain/UseCase';
+import { Either, left, right } from '@core/logic/Either';
+import GenericAppError from '@core/logic/GenericAppError';
+import GenericErrors from '@core/logic/GenericErrors';
+
+type Response = Either<GenericAppError, >;
+
+export default class {{pascalCase name}} implements UseCase<, Response> {
+    constructor() {}
+
+    public async execute(): Promise<Response> {
+        return right()
+    }
+}

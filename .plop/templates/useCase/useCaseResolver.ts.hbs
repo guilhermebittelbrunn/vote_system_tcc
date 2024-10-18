@@ -1,0 +1,14 @@
+import BaseResolver from '@core/infra/BaseResolver';
+import {{pascalCase name}} from './{{camelCase name}}';
+
+export default class {{pascalCase name}}Resolver extends BaseResolver<, > {
+    constructor(private useCase: {{pascalCase name}}) {
+        super();
+    }
+
+    public async execute(): Promise<> {
+        const result = await this.useCase.execute();
+
+        return result
+    }
+}

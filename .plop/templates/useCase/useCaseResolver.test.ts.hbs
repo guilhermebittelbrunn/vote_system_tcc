@@ -1,0 +1,37 @@
+import request from 'supertest';
+import { getRepository, Repository } from 'typeorm';
+import { StatusCodes } from 'http-status-codes';
+
+import app from '@root-shared/infra/http/express/app';
+import connection from '@database/TypeORM/connection';
+
+import getUserWithBusiness, {
+    AuthenticatedUserData,
+} from '@user/repositories/tests/helpers/getAuthenticatedUserWithBusiness';
+
+let authInfos: AuthenticatedUserData;
+
+describe('{{sentenceCase name}} (e2e)', () => {
+    beforeAll(async () => {
+        await connection.create();
+
+        authInfos = await getUserWithBusiness();
+    });
+
+    afterAll(async () => {
+        await connection.close();
+    });
+
+    it('should be able to {{lowerCase name}}', async () => {
+        const response = await request(app)
+            .post(`/graphql`)
+            .set('Authorization', authInfos.jwt)
+            .send({
+                query: `{
+
+                }`,
+            });
+
+        expect(response.status).toBe(StatusCodes.OK);
+    });
+});

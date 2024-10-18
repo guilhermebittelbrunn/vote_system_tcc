@@ -1,0 +1,43 @@
+// @ts-check
+const faker = require('faker');
+
+const isProd = process.env.NODE_ENV ? process.env.NODE_ENV === 'production' : false;
+const rootDir = isProd ? 'dist' : 'src';
+
+faker.locale = 'pt_BR';
+
+const common = {
+    type: 'postgres',
+    host: process.env.DB_HOST || 'localhost',
+    port: Number(process.env.DB_PORT) || 5432,
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    schema: process.env.DB_SCHEMA || 'public',
+    synchronize: false,
+    dropSchema: false,
+    // logging: true,
+    entities: [rootDir + '/shared/infra/database/TypeORM/entities/**/*.**'],
+    subscribers: [
+        rootDir + '/shared/infra/database/TypeORM/subscribers/**/*.**',
+        rootDir + '/shared/infra/database/TypeORM/subscribers/common.ts',
+    ],
+};
+
+module.exports = [
+    {
+        ...common,
+        migrations: [rootDir + '/shared/infra/database/TypeORM/migrations/*.**'],
+        cli: {
+            migrationsDir: rootDir + '/shared/infra/database/TypeORM/migrations',
+        },
+    },
+    {
+        name: 'seed',
+        ...common,
+        migrations: [rootDir + '/shared/infra/database/TypeORM/seedings/*.**'],
+        cli: {
+            migrationsDir: rootDir + '/shared/infra/database/TypeORM/seedings',
+        },
+    },
+];

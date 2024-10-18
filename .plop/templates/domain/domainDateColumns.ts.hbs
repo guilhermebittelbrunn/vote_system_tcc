@@ -1,0 +1,39 @@
+import Entity from '@core/domain/Entity';
+import UniqueEntityID from '@core/domain/UniqueEntityID';
+import { Either, right } from '@core/logic/Either';
+import GenericAppError from '@core/logic/GenericAppError';
+
+interface I{{pascalCase name}}Props {
+    createdAt?: Date;
+    updatedAt?: Date;
+    deletedAt?: Date;
+}
+
+export default class {{pascalCase name}} extends Entity<I{{pascalCase name}}Props> {
+    constructor(props: I{{pascalCase name}}Props, id?: UniqueEntityID) {
+        super(props, id);
+    }
+
+    get id(): UniqueEntityID {
+        return this._id;
+    }
+
+    get createdAt(): Date | undefined {
+        return this.props.createdAt;
+    }
+
+    get updatedAt(): Date | undefined {
+        return this.props.updatedAt;
+    }
+
+    get deletedAt(): Date | undefined {
+        return this.props.deletedAt;
+    }
+
+    public static create(
+        props: I{{pascalCase name}}Props,
+        id?: UniqueEntityID,
+    ): Either<GenericAppError, {{pascalCase name}}> {
+        return right(new {{pascalCase name}}(props, id));
+    }
+}

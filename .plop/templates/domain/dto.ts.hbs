@@ -1,0 +1,9 @@
+import { Field, ObjectType } from 'type-graphql';
+
+@ObjectType()
+export default class {{pascalCase name}}DTO {
+    @Field()
+    id: string;
+
+    --dbInfo--
+}

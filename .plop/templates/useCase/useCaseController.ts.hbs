@@ -1,0 +1,22 @@
+import { Request, Response } from 'express';
+import BaseController from '@core/infra/BaseController';
+import GenericAppError from '@core/logic/GenericAppError';
+import {{pascalCase name}} from './{{camelCase name}}';
+
+export default class {{pascalCase name}}Controller extends BaseController {
+    constructor(private useCase: {{pascalCase name}}) {
+        super();
+    }
+
+    public async executeImplementation(req: Request, res: Response): Promise<Response> {
+        const result = await this.useCase.execute(this.payload(req));
+
+        if (result.isLeft()) {
+            if (result.value instanceof GenericAppError) {
+                return this.genericErrorResponse(res, result.value);
+            }
+        }
+
+        return this.ok(res);
+    }
+}
