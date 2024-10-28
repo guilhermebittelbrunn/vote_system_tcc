@@ -9,8 +9,12 @@ export default class CreateCandidateController extends BaseController {
         super();
     }
 
-    public async executeImplementation(req: Request, res: Response): Promise<Response> {
-        const result = await this.useCase.execute(this.payload(req));
+    public async executeImplementation(req: Request & any, res: Response): Promise<Response> {
+        console.log('req.file?.filename :>> ', req.file?.filename);
+        const result = await this.useCase.execute({
+                ...this.payload(req),
+                image: req.file?.filename,
+            });
 
         if (result.isLeft()) {
             return this.genericErrorResponse(res, result.value);

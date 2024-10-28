@@ -20,6 +20,9 @@ export default class CandidateEntity extends BaseEntity {
     @Column({ nullable: true })
     description: string;
 
+    @Column('text', { nullable: true })
+    image: string;
+
     @Column({ default: 0 })
     quantity: number;
 

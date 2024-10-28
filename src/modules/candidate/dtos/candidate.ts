@@ -5,6 +5,7 @@ export default class CandidateDTO {
     name: string;
     party: string | null;
     description: string | null;
+    image: string | null;
     quantity: number;
     electionId: string;
     createdAt: Date;

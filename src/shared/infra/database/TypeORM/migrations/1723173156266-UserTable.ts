@@ -37,6 +37,7 @@ export class UserTable1723173156266 implements MigrationInterface {
                     {
                         name: 'phone_number',
                         type: 'varchar',
+                        isNullable: true,
                     },
                     {
                         name: 'birthday',

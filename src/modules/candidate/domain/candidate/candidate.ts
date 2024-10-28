@@ -11,6 +11,7 @@ interface ICandidateProps {
     party: string | null;
     electionId: UniqueEntityID;
     description: string | null;
+    image: string | null;
     quantity: number;
     createdAt?: Date;
     updatedAt?: Date;
@@ -44,6 +45,10 @@ export default class Candidate extends Entity<ICandidateProps> {
         return this.props.description;
     }
 
+    get image(): string | null {
+        return this.props.image;
+    }
+
     get quantity(): number {
         return this.props.quantity;
     }
@@ -72,14 +77,13 @@ export default class Candidate extends Entity<ICandidateProps> {
         return {
             ...props,
             name: String(props.name),
-            party: String(props.party),
         };
     }
 
     public static create(props: ICandidateProps, id?: UniqueEntityID): Either<GenericAppError, Candidate> {
         const guardedProps = Guard.againstNullOrUndefinedBulk([
-            { argument: props.name, argumentName: 'name' },
-            { argument: props.electionId, argumentName: 'electionId' },
+            { argument: props.name, argumentName: 'Nome' },
+            { argument: props.electionId, argumentName: 'Eleição' },
         ]);
 
         if (!guardedProps.succeeded) {

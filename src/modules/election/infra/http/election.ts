@@ -6,10 +6,6 @@ import { listElectionsController } from 'modules/election/useCases/listElections
 
 const upload = initUpload();
 const createUpload = upload.single('image');
-// const createUpload = upload.fields([
-//     { name: 'image', maxCount: 1 }, // Imagem da eleição
-//     { name: 'candidateImages', maxCount: 10 } // Imagens dos candidatos
-// ]);
 
 const electionRootRouter = Router();
 
@@ -23,6 +19,10 @@ electionRootRouter.get('/:id', (req, res) => {
 
 electionRootRouter.post('/', promisifyMiddleware(createUpload),(req, res) => {
     return createElectionController.execute(req, res)
+});
+
+electionRootRouter.delete('/:id', (req, res) => {
+    return findElectionByIdController.execute(req, res)
 });
 
 export default electionRootRouter;

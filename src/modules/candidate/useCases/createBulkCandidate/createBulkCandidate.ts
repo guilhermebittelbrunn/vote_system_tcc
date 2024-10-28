@@ -21,29 +21,22 @@ export default class CreateBulkCandidate implements UseCase<CreateCandidateReque
             return left(new GenericErrors.InvalidParam(guardedProps.message));
         }
 
-        const candidatesPromises: any[] = []
+        const results: any[] = await Promise.all(dto.map((candidate, idx)=>{
+            return this.createCandidate.execute({
+                name: candidate.name,
+                party: candidate.party ?? null,
+                electionId: candidate.electionId,
+                description: candidate.description ?? null,
+                quantity: 0,
+            })
+        }));
 
-        for(let candidateIndex = 0; candidateIndex < dto.length; candidateIndex++) {
-            const candidate = dto[candidateIndex];
+        const error = results.find(result => result.isLeft());
 
-            candidatesPromises.push(
-                this.createCandidate.execute({
-                    name: candidate.name,
-                    party: candidate.party ?? null,
-                    electionId: candidate.electionId,
-                    description: candidate.description ?? null,
-                    quantity: 0,
-                })
-            );
+        if(error) {
+            return left(error.value);
         }
 
-        const candidatesResults = await Promise.all(candidatesPromises);
-
-        for (const result of candidatesResults) {
-            if (result.isLeft()) {
-                return left(result.value);
-            }
-        }
         return right(null);
     }
 }
